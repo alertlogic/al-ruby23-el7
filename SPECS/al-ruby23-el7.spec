@@ -20,6 +20,10 @@ Requires:   al-s3repo
 Requires(pre):   rh-ruby23-ruby
 Requires(pre):   rh-ruby23-ruby-devel
 Requires(pre):   rh-ruby23-rubygems-devel
+Requires(pre):   gcc
+Requires(pre):   make
+Requires(pre):   libffi-devel
+Requires(pre):   rpm-build
 
 %description
 Install and configure al-ruby23-el7
