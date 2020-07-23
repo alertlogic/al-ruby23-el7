@@ -79,11 +79,25 @@ install -m 755 %{name}.sh %{buildroot}/usr/local/sbin/%{name}.sh
 /usr/local/sbin/%{name}.sh $1
 
 %preun
+if [ $1 == 0 ]; then
+  # remove symlinks
+  for arg in $(ls /opt/rh/rh-ruby23/root/bin/*); do
+    bin=$(basename $arg)
+    if [ -f /usr/bin/${bin}23 ]; then
+      rm -f /usr/bin/${bin}23
+    fi
+    if [ "$(readlink /usr/bin/${bin})" == "${arg}" ]; then
+        rm -f /usr/bin/${bin}
+    fi
+  done
+fi
 
 %clean
 if [ -d %{buildroot} ] ; then
   rm -rf %{buildroot}/*
 fi
+
+%postun
 
 %changelog
 # date "+%a %b %d %Y"
