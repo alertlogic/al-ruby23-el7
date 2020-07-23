@@ -50,6 +50,9 @@ elif [ "${1}" == 2 ]; then # if update
   echo "script updated and ran sucessfully" 1>&2
 fi
 
+# update libraries
+ldconfig
+
 # if update or install
 echo "install or update ran succesfully" 1>&2
 EOF
