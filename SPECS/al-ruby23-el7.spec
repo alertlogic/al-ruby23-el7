@@ -17,6 +17,8 @@ Summary:    AlertLogic al-ruby23-el7
 License:    AlertLogic (c). All rights reserved.
 BuildArch:  noarch
 Requires:   al-s3repo
+Requires(pre):   rh-ruby23-ruby
+Requires(pre):   rh-ruby23-rubygems-devel
 
 %description
 Install and configure al-ruby23-el7
@@ -33,34 +35,16 @@ cat > %{name}.sh <<'EOF'
 NAME=%{name}
 VERSION=%{version}
 
-# environment override variables
-BOOTSTRAP=${BOOTSTRAP:-"false"}
-BOOTSTRAPCFN=${BOOTSTRAPCFN:-"false"}
-BOOTSTRAPLATE=${BOOTSTRAPLATE:-"false"}
-MY_SECRET=${MY_SECRET:-""}
-
 # install/update logic
 if [ "${1}" == 1 ]; then # if install
-  # save a secret from the environment
-  if [ ! -z "${MY_SECRET}" ]; then
-    sed -i "s/^MY_SECRET=.*$/MY_SECRET=${MY_SECRET}/" /etc/default/al-ruby23-el7
-  fi
-  
-  # if bootstrap, run on next boot, else run now
-  if [ $BOOTSTRAPLATE == "true" ]; then
-    echo "running config 3 minutes after next boot" 1>&2
-    ln -s /usr/local/sbin/al-ruby23-el7-config.sh /etc/rc.runoncelate/
-  elif [ $BOOTSTRAPCFN == "true" ]; then
-    echo "running config when called by cfn init" 1>&2
-    ln -s /usr/local/sbin/al-ruby23-el7-config.sh /etc/rc.runoncecfn/
-  elif [ $BOOTSTRAP == "true" ]; then
-    echo "running config after next boot" 1>&2
-    ln -s /usr/local/sbin/al-ruby23-el7-config.sh /etc/rc.runonce/
-  else
-    echo "running config now" 1>&2
-    /usr/local/sbin/al-ruby23-el7-config.sh
-  fi
-
+  for arg in $(ls /opt/rh/rh-ruby23/root/bin/*); do
+    bin=$(basename $arg)
+    ln -sf $arg /usr/bin/${bin}23
+    if [ ! -f /usr/bin/${bin} ]; then
+      ln -s $arg /usr/bin/${bin}
+    fi
+  done
+  /usr/local/bin/al-ruby23-gem-install.sh || echo "Could not download gems! Please run /usr/local/bin/al-ruby23-gem-install.sh" 1>&2
   echo "script installed and ran sucessfully" 1>&2
 elif [ "${1}" == 2 ]; then # if update
   echo "script updated and ran sucessfully" 1>&2
@@ -77,21 +61,14 @@ install -m 755 %{name}.sh %{buildroot}/usr/local/sbin/%{name}.sh
 %files
 /usr/local/sbin/*
 /usr/local/share/%{name}/*
-%config(noreplace) /etc/default/*
+%config(noreplace) /etc/ld.so.conf.d/*
 
 %pre
-if [ "${1}" == 1 ]; then # if install
-  echo "i run before rpm is installed" 1>&2
-elif [ "${1}" == 2 ]; then # if update
-  echo "i run before rpm is updated" 1>&2
-fi
 
 %post
 /usr/local/sbin/%{name}.sh $1
 
 %preun
-# turn things off before uninstalling
-echo "i run before rpm is uninstalled" 1>&2
 
 %clean
 if [ -d %{buildroot} ] ; then
