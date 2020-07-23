@@ -44,7 +44,7 @@ if [ "${1}" == 1 ]; then # if install
       ln -s $arg /usr/bin/${bin}
     fi
   done
-  /usr/local/bin/al-ruby23-gem-install.sh || echo "Could not download gems! Please run /usr/local/bin/al-ruby23-gem-install.sh" 1>&2
+  /usr/local/sbin/al-ruby23-gem-install.sh || echo "Could not download gems! Please run /usr/local/sbin/al-ruby23-gem-install.sh" 1>&2
   echo "script installed and ran sucessfully" 1>&2
 elif [ "${1}" == 2 ]; then # if update
   echo "script updated and ran sucessfully" 1>&2
