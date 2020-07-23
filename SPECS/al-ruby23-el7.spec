@@ -83,7 +83,7 @@ if [ $1 == 0 ]; then
   # remove symlinks
   for arg in $(ls /opt/rh/rh-ruby23/root/bin/*); do
     bin=$(basename $arg)
-    if [ -f /usr/bin/${bin}23 ]; then
+    if [ "$(readlink /usr/bin/${bin}23)" == "${arg}" ]; then
       rm -f /usr/bin/${bin}23
     fi
     if [ "$(readlink /usr/bin/${bin})" == "${arg}" ]; then
