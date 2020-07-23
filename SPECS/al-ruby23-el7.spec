@@ -44,14 +44,16 @@ if [ "${1}" == 1 ]; then # if install
       ln -s $arg /usr/bin/${bin}
     fi
   done
+  # update libraries
+  ldconfig
+  # install gems
   /usr/local/sbin/al-ruby23-gem-install.sh || echo "Could not download gems! Please run /usr/local/sbin/al-ruby23-gem-install.sh" 1>&2
   echo "script installed and ran sucessfully" 1>&2
 elif [ "${1}" == 2 ]; then # if update
+  # update libraries
+  ldconfig
   echo "script updated and ran sucessfully" 1>&2
 fi
-
-# update libraries
-ldconfig
 
 # if update or install
 echo "install or update ran succesfully" 1>&2
