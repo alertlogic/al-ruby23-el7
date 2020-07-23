@@ -13,6 +13,7 @@ yumdownloader --destdir=RPMS/x86_64/ \
   rh-ruby23-rubygem-did_you_mean \
   rh-ruby23-rubygem-io-console \
   rh-ruby23-ruby \
+  rh-ruby23-ruby-devel \
   rh-ruby23-runtime \
   rh-ruby23-rubygem-json \
   rh-ruby23-rubygem-bigdecimal

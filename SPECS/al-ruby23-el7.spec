@@ -18,6 +18,7 @@ License:    AlertLogic (c). All rights reserved.
 BuildArch:  noarch
 Requires:   al-s3repo
 Requires(pre):   rh-ruby23-ruby
+Requires(pre):   rh-ruby23-ruby-devel
 Requires(pre):   rh-ruby23-rubygems-devel
 
 %description
